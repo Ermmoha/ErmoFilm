@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
+    id("com.google.gms.google-services")
 
     id("com.google.dagger.hilt.android")
     id("kotlin-kapt")
@@ -98,4 +99,10 @@ dependencies {
 
     //Coil
     implementation ("io.coil-kt:coil-compose:2.4.0")
+    implementation("io.coil-kt:coil-video:2.4.0")
+
+    //FireBase
+    implementation(platform("com.google.firebase:firebase-bom:33.8.0"))
+    implementation ("com.google.firebase:firebase-auth-ktx")
+
 }

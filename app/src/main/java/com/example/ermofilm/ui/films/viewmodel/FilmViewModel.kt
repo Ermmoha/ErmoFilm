@@ -23,7 +23,30 @@ class FilmViewModel @Inject constructor(
 
     init {
         getFilmInfo(filmId)
+        getGenre()
         Log.d("FilmViewModel", "${state.value.sequelsAndPrequels}")
+    }
+
+
+    private fun getGenre(){
+        viewModelScope.launch {
+            try {
+                val genreList = ktorRepository.getGenreList()
+                Log.d("HomeViewModel", "Response: $genreList")
+
+                val genreMapping = genreList.genres.associateBy({ it.genre ?: "" }, { it.id })
+                val countryMapping = genreList.countries.associateBy ({ it.country ?: "" }, { it.id })
+
+                _state.update { it.copy(
+                    genreList = genreList.genres,
+                    genreMap = genreMapping,
+                    countryMap = countryMapping,
+                    countryList = genreList.countries)
+                }
+            } catch (e: Exception) {
+                Log.d("HomeViewModel", "Error: ${e.localizedMessage}")
+            }
+        }
     }
 
     private fun getFilmInfo(id: Int) {
@@ -32,12 +55,12 @@ class FilmViewModel @Inject constructor(
                 val filmInfo = ktorRepository.getFilmById(id)
                 val actorsInfo = ktorRepository.getActorById(id)
                 val sequelsPrequels = ktorRepository.getSequelsAndPrequels(id)
-                Log.d("FilmViewMod", "Response: $sequelsPrequels")
+                Log.d("FilmViewModel", "Sequels and Prequels: ${sequelsPrequels}")
 
                 _state.update { it.copy(
                     filmInfo = filmInfo!!,
                     actors = actorsInfo,
-                    sequelsAndPrequels = sequelsPrequels.items!!
+                    sequelsAndPrequels = sequelsPrequels
 
                 ) }
             } catch (e: Exception) {
@@ -47,6 +70,7 @@ class FilmViewModel @Inject constructor(
         }
     }
 
+
     fun getCinemaInfo(id: Int) {
         viewModelScope.launch {
             try {
@@ -54,6 +78,16 @@ class FilmViewModel @Inject constructor(
                 _state.update { it.copy(cinema = cinemaInfo.items) }
             } catch (e: Exception) {
                 Log.d("FilmViewModel", "Error: ${e.localizedMessage}")
+            }
+        }
+    }
+    fun getTrailerInfo(id: Int) {
+        viewModelScope.launch {
+            try {
+                val trailerInfo = ktorRepository.getTrailerFilm(id)
+                _state.update { it.copy(trailer = trailerInfo.items) }
+            } catch (e: Exception) {
+                Log.d("FilmViewModelTrailer", "Error: ${e.localizedMessage}")
             }
         }
     }

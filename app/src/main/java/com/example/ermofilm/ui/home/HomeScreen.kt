@@ -117,62 +117,65 @@ fun CardView(
             .width(150.dp)
             .padding(3.dp)
     ) {
-        Box(modifier = Modifier.fillMaxSize()){
-        if (imageUrl != null) {
-        AsyncImage(
-            model = imageUrl,
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
-        )
-    } else {
-        Text(
-            text = "Нет изображения",
-            color = Color.Gray,
-            modifier = Modifier.fillMaxSize(),
-            textAlign = TextAlign.Center
-        ) }
-        Box(
-            modifier = Modifier
-                .clip(RoundedCornerShape(topEnd = 12.dp))
-                .background(Color.Black.copy(alpha = 0.7f))
-                .align(Alignment.BottomStart)
-                .size(50.dp, 28.dp),
-        ) {
-            Text(
-                text = age?.let { "$it+" } ?: "16+",
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                fontSize = 15.sp,
-                modifier = Modifier.align(Alignment.Center)
-            )
-            }
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(bottomStart = 12.dp))
-                    .background(
-                        when {
-                            rating == null -> Color.Gray.copy(alpha = 0.7f)
-                            rating >= 7 -> Color(50, 205, 50).copy(alpha = 0.8f)
-                            rating >= 4.3 -> Color(95, 158, 160).copy(alpha = 0.8f)
-                            else -> Color(139, 69, 19).copy(alpha = 0.7f)
-                        },
-                    )
-                    .align(Alignment.TopEnd)
-                    .size(40.dp, 25.dp),
-            ) {
-                Text(
-                    text = rating?.let {
-                        "$it"
-                    } ?: "N/A",
-                    color = when {
-                        rating == null ->  Color.White
-                            else -> Color.Black
-                                 },
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 15.sp,
-                    modifier = Modifier.align(Alignment.Center)
+        Box(modifier = Modifier.fillMaxSize()) {
+            if (imageUrl != null) {
+                AsyncImage(
+                    model = imageUrl,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
                 )
+            } else {
+                Text(
+                    text = "Нет изображения",
+                    color = Color.Gray,
+                    modifier = Modifier.fillMaxSize(),
+                    textAlign = TextAlign.Center
+                )
+            }
+            if (rating != 100.5) {
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(topEnd = 12.dp))
+                        .background(Color.Black.copy(alpha = 0.7f))
+                        .align(Alignment.BottomStart)
+                        .size(50.dp, 28.dp),
+                ) {
+                    Text(
+                        text = age?.let { "$it+" } ?: "16+",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 15.sp,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(bottomStart = 12.dp))
+                        .background(
+                            when {
+                                rating == null -> Color.Gray.copy(alpha = 0.7f)
+                                rating >= 7 -> Color(50, 205, 50).copy(alpha = 0.8f)
+                                rating >= 4.3 -> Color(95, 158, 160).copy(alpha = 0.8f)
+                                else -> Color(139, 69, 19).copy(alpha = 0.7f)
+                            },
+                        )
+                        .align(Alignment.TopEnd)
+                        .size(40.dp, 25.dp),
+                ) {
+                    Text(
+                        text = rating?.let {
+                            "$it"
+                        } ?: "N/A",
+                        color = when {
+                            rating == null -> Color.White
+                            else -> Color.Black
+                        },
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 15.sp,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
             }
         }
     }

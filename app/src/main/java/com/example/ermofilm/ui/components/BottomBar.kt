@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 fun BottomBar(
     navigateToCategory: () -> Unit,
     navigateToHome: () -> Unit,
-    navigateToSearch: () -> Unit
+    navigateToProfile:() -> Unit
     ){
     var selectedItemIndex by remember { mutableIntStateOf(2) }
     BottomAppBar(
@@ -87,7 +87,7 @@ fun BottomBar(
                 selected = selectedItemIndex == 3,
                 onClick = {
                     selectedItemIndex = 3
-                          navigateToSearch
+                          navigateToProfile()
                           },
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = Color.Black,

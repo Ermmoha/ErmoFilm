@@ -20,6 +20,7 @@ import com.example.ermofilm.ui.navigation.NavigationDestination
 import com.example.ermofilm.ui.selectcategory.viewmodel.SelectedCategoryViewModel
 
 object SelectCategoryDestination: NavigationDestination{
+    var type = ""
     var genreId = 0
     override val title = "Выбранно"
     override val route = "select"

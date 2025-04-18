@@ -37,6 +37,7 @@ import com.example.ermofilm.R
 import com.example.ermofilm.ui.category.viewmodel.CategoryState
 import com.example.ermofilm.ui.category.viewmodel.CategoryViewModel
 import com.example.ermofilm.ui.navigation.NavigationDestination
+import com.example.ermofilm.ui.selectcategory.SelectCategoryDestination.type
 
 object CategoryDestination: NavigationDestination {
     override val title = "Категории"
@@ -92,7 +93,10 @@ fun CardCategory(
     state: CategoryState
 ) {
     Card(
-        onClick = { navigateToSelectCategory(genreId) },
+        onClick = {
+            navigateToSelectCategory(genreId)
+            type = "genres="
+                  },
         modifier = Modifier
             .height(150.dp)
             .width(230.dp)
@@ -115,7 +119,7 @@ fun CardCategory(
                     genreId == 9 -> painterResource(R.drawable.filmnuar)
                     genreId == 10 -> painterResource(R.drawable.western)
 
-                    else -> painterResource(R.drawable.dog) // Укажите изображение по умолчанию
+                    else -> painterResource(R.drawable.dog)
                 },
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
@@ -145,7 +149,7 @@ fun CardCategory(
                     text = title,
                     color = Color.Black,
                     maxLines = 2,
-                    fontSize = 23.sp,
+                    fontSize = 22.sp,
                     fontFamily = FontFamily(Font(R.font.logo7)),
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier

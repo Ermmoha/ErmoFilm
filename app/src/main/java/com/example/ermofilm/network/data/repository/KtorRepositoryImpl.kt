@@ -1,6 +1,5 @@
 package com.example.ermofilm.network.data.repository
 
-import android.util.Log
 import com.example.ermofilm.network.core.ApiConst
 import com.example.ermofilm.network.domain.model.Actor
 import com.example.ermofilm.network.domain.model.Cinema
@@ -9,13 +8,13 @@ import com.example.ermofilm.network.domain.model.FilmResponse
 import com.example.ermofilm.network.domain.model.GenreListId
 import com.example.ermofilm.network.domain.model.SearchFilm
 import com.example.ermofilm.network.domain.model.SelectGenre
-import com.example.ermofilm.network.domain.model.SequelsAndPrequels
+import com.example.ermofilm.network.domain.model.SequelsAndPrequelsItems
+import com.example.ermofilm.network.domain.model.VideoResponse
 import com.example.ermofilm.network.domain.repository.KtorRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
-import io.ktor.client.statement.bodyAsText
 import javax.inject.Inject
 
 class KtorRepositoryImpl @Inject constructor(
@@ -53,25 +52,13 @@ class KtorRepositoryImpl @Inject constructor(
             }
         }.body()
 
-    override suspend fun getSequelsAndPrequels(id: Int): SequelsAndPrequels {
-        val response = httpClient.get(ApiConst.SEQUELES_AND_PREQUELS + id + "/sequels_and_prequels") {
+    override suspend fun getSequelsAndPrequels(id: Int): List<SequelsAndPrequelsItems> =
+        httpClient.get(ApiConst.SEQUELES_AND_PREQUELS + id + "/sequels_and_prequels") {
             headers {
                 append("X-API-KEY", "5d3845da-1e85-41ae-9445-f4def95ce797")
                 append("Content-Type", "application/json")
             }
-        }
-
-        val responseText = response.bodyAsText()
-        Log.d("FilmViewModel", "Response: $responseText")
-
-        // Обработка ошибок
-        if (responseText.contains("\"message\"")) {
-            Log.e("FilmViewModel", "Error in response: $responseText")
-            return SequelsAndPrequels(emptyList()) // Возвращаем пустой объект
-        }
-
-        return response.body()
-    }
+        }.body()
 
     override suspend fun getGenreList(): GenreListId =
         httpClient.get(ApiConst.GENRE_LIST_URL) {
@@ -89,8 +76,16 @@ class KtorRepositoryImpl @Inject constructor(
             }
         }.body()
 
-    override suspend fun getSelectGenre(genreId: Int): SelectGenre =
-        httpClient.get(ApiConst.SELECT_GENRE_URL + genreId + "&ratingFrom=0&ratingTo=10&yearFrom=1000&yearTo=3000&page=1") {
+    override suspend fun getSelectGenre(genreId: Int, type:  String): SelectGenre =
+        httpClient.get(ApiConst.SELECT_GENRE_URL + type + genreId + "&ratingFrom=0&ratingTo=10&yearFrom=1000&yearTo=3000&page=1") {
+            headers {
+                append("X-API-KEY", "5d3845da-1e85-41ae-9445-f4def95ce797")
+                append("Content-Type", "application/json")
+            }
+        }.body()
+
+    override suspend fun getTrailerFilm(id: Int): VideoResponse =
+        httpClient.get(ApiConst.INFO_FILM_URL + id + "/videos") {
             headers {
                 append("X-API-KEY", "5d3845da-1e85-41ae-9445-f4def95ce797")
                 append("Content-Type", "application/json")

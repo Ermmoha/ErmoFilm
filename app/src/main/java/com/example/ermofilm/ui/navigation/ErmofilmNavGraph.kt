@@ -22,12 +22,20 @@ import com.example.ermofilm.ui.films.viewmodel.FilmViewModel
 import com.example.ermofilm.ui.home.HomeDestination
 import com.example.ermofilm.ui.home.HomeScreen
 import com.example.ermofilm.ui.home.viewmodel.HomeViewModel
+import com.example.ermofilm.ui.profile.ProfileDestination
+import com.example.ermofilm.ui.profile.ProfileScreen
 import com.example.ermofilm.ui.search.SearchDestination
 import com.example.ermofilm.ui.search.SearchScreen
 import com.example.ermofilm.ui.search.viewmodel.SearchViewModel
 import com.example.ermofilm.ui.selectcategory.SelectCategoryDestination
 import com.example.ermofilm.ui.selectcategory.SelectCategoryScreen
 import com.example.ermofilm.ui.selectcategory.viewmodel.SelectedCategoryViewModel
+import com.example.ermofilm.ui.signin.AuthorizationDestination
+import com.example.ermofilm.ui.signin.AuthorizationScreen
+import com.example.ermofilm.ui.signin.RegistrationDestination
+import com.example.ermofilm.ui.signin.RegistrationScreen
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 @Composable
 fun ErmofilmNavGraph(
@@ -36,11 +44,18 @@ fun ErmofilmNavGraph(
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    val auth = Firebase.auth
+    val startDestination = if (auth.currentUser != null) {
+        HomeDestination.route
+    } else {
+        AuthorizationDestination.route
+    }
 
     val searchViewModel = hiltViewModel<SearchViewModel>()
 
     Scaffold(
             topBar = {
+                if (currentRoute != AuthorizationDestination.route && currentRoute != RegistrationDestination.route)
                 TopBar(
                     navigateToBack = { navController.popBackStack() },
                     navigateToSearch = {
@@ -52,7 +67,7 @@ fun ErmofilmNavGraph(
                     onDone = { searchViewModel.getSearchFilm() }
                 ) },
             bottomBar = {
-                if (currentRoute == HomeDestination.route || currentRoute == CategoryDestination.route)
+                if (currentRoute == HomeDestination.route || currentRoute == CategoryDestination.route || currentRoute == ProfileDestination.route)
                 BottomBar(
                     navigateToCategory = {
                         navController.navigate(CategoryDestination.route)
@@ -60,14 +75,14 @@ fun ErmofilmNavGraph(
                     navigateToHome = {
                         navController.navigate(HomeDestination.route)
                     },
-                    navigateToSearch = {
-                        navController.navigate(SearchDestination.route)
+                    navigateToProfile = {
+                        navController.navigate(ProfileDestination.route)
                     }
                 ) }
         ) { contentPadding ->
             NavHost(
                 navController = navController,
-                startDestination = CategoryDestination.route,
+                startDestination = startDestination,
                 modifier = Modifier.padding(contentPadding)
             ) {
                 composable(route = HomeDestination.route) {
@@ -84,6 +99,10 @@ fun ErmofilmNavGraph(
                     val filmViewModel = hiltViewModel<FilmViewModel>()
                     FilmScreen(
                         viewModel = filmViewModel,
+                        navigateToSelectCategory = {
+                            navController.navigate(SelectCategoryDestination.route)
+                            SelectCategoryDestination.genreId = it
+                        },
                         navigateToFilm = {
                             navController.navigate(FilmDestination.route)
                             FilmDestination.filmId = it
@@ -117,6 +136,23 @@ fun ErmofilmNavGraph(
                             navController.navigate(FilmDestination.route)
                             FilmDestination.filmId = it
                         }
+                    )
+                }
+                composable(route = AuthorizationDestination.route) {
+                    AuthorizationScreen(
+                        navigateToHome = { navController.navigate(HomeDestination.route) },
+                        navigateToReg = { navController.navigate(RegistrationDestination.route)}
+                    )
+                }
+                composable(route = RegistrationDestination.route) {
+                    RegistrationScreen(
+                        navigateToAut = {navController.navigate(AuthorizationDestination.route)},
+                        navigateToHome = {navController.navigate(HomeDestination.route)}
+                    )
+                }
+                composable(route = ProfileDestination.route) {
+                    ProfileScreen(
+                        navigateToAut = {navController.navigate(AuthorizationDestination.route)}
                     )
                 }
             }

@@ -93,16 +93,15 @@ data class CinemaItems(
 )
 
 @Serializable
-data class SequelsAndPrequels(
+data class SequelsAndPrequelsResponse(
     val items: List<SequelsAndPrequelsItems> = emptyList()
 )
-
 @Serializable
 data class SequelsAndPrequelsItems(
     val filmId: Int,
-    val nameRu: String = "",
-    val nameEn: String = "",
-    val nameOriginal: String = "",
+    val nameRu: String? = "",
+    val nameEn: String? = "",
+    val nameOriginal: String? = "",
     val posterUrl: String = "",
     val posterUrlPreview: String = "",
     val relationType: RelationType 
@@ -165,3 +164,24 @@ data class SelectGenre(
     val totalPages: Int = 0,
     val items: List<FilmItem> = emptyList()
 )
+
+@Serializable
+data class VideoResponse(
+    val total: Int,
+    val items: List<VideoItem>
+)
+
+@Serializable
+data class VideoItem(
+    val url: String,
+    val name: String,
+    val site: VideoSite
+)
+
+@Serializable
+enum class VideoSite {
+    YOUTUBE,
+    KINOPOISK_WIDGET,
+    YANDEX_DISK,
+    UNKNOWN
+}

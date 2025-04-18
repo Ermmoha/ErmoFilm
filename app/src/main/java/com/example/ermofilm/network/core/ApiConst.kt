@@ -8,11 +8,12 @@ object ApiConst {
     const val ACTORS_URL =
         "https://kinopoiskapiunofficial.tech/api/v1/staff?filmId="
     const val SEQUELES_AND_PREQUELS =
-        "https://kinopoiskapiunofficial.tech/api/v2.1/films"
+        "https://kinopoiskapiunofficial.tech/api/v2.1/films/"
     const val GENRE_LIST_URL =
         "https://kinopoiskapiunofficial.tech/api/v2.2/films/filters"
     const val SEARCH_URL =
         "https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-keyword?keyword="
     const val SELECT_GENRE_URL  =
-        "https://kinopoiskapiunofficial.tech/api/v2.2/films?genres="
+        "https://kinopoiskapiunofficial.tech/api/v2.2/films?"
+
 }

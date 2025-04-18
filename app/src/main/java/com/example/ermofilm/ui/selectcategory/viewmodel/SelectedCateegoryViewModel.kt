@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ermofilm.network.domain.repository.KtorRepository
 import com.example.ermofilm.ui.selectcategory.SelectCategoryDestination.genreId
+import com.example.ermofilm.ui.selectcategory.SelectCategoryDestination.type
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,13 +23,13 @@ class SelectedCategoryViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     init {
-        getFilms(genreId = genreId)
+        getFilms(genreId = genreId, type = type)
     }
 
-    private fun getFilms(genreId: Int) {
+    private fun getFilms(genreId: Int, type: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val selectFilms = ktorRepository.getSelectGenre(genreId)
+                val selectFilms = ktorRepository.getSelectGenre(genreId, type)
                 Log.d("HomeViewModel", "Response: $selectFilms")
 
                 selectFilms.items.let { list ->
